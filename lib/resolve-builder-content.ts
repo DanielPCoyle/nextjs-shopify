@@ -73,11 +73,18 @@ export async function resolveBuilderContent(
 
       async ProductCollectionGrid({ collection }) {
         if (collection && typeof collection === 'string') {
-          const { products } = await getCollection(shopifyConfig, {
+          const collectionData = await getCollection(shopifyConfig, {
             handle: collection,
           })
-          return {
-            products,
+          if (collectionData !== null) {
+            const { products } = collectionData;
+            return {
+              products,
+            }
+          } else {
+            // Handle the case when collectionData is null
+            // You might want to return an empty object, throw an error, or do something else
+            return {};
           }
         }
       },
