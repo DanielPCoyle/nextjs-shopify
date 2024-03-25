@@ -1,5 +1,6 @@
 import { Builder } from '@builder.io/react'
 import dynamic from 'next/dynamic'
+import { BuilderMarquee } from './BuilderMarquee';
 
 const LazyProductView = dynamic(
   () => import(`blocks/ProductView/ProductView`),
@@ -45,3 +46,47 @@ Builder.registerComponent(LazyProductView, {
   image: 'https://unpkg.com/css.gg@2.0.0/icons/svg/ereader.svg',
   description: 'Choose a product to show its details on page',
 })
+
+Builder.registerComponent(BuilderMarquee, {
+  name: 'Marquee',
+  inputs: [
+    {
+      name: 'children',
+      type: 'list',
+      subFields: [
+        {
+          name: 'content',
+          type: 'text',
+        },
+        {
+          name: 'color',
+          type: 'color',
+        },
+      ],
+    },
+    {
+      name: 'speed',
+      type: 'number',
+      defaultValue: 40,
+    },
+    {
+      name: 'gap',
+      type: 'number',
+      defaultValue: 40,
+    },
+    {
+      name: 'gradient',
+      type: 'boolean',
+      defaultValue: false,
+    },
+    {
+      name:"direction",
+      type:"text",
+      defaultValue:"left",
+      enum: ["left", "right", "up", "down"]
+    }
+  ],
+  description: 'Scrolling marquee',
+})
+
+

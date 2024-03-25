@@ -24,6 +24,11 @@ import { getLayoutProps } from '@lib/get-layout-props'
 import { useAddItemToCart } from '@lib/shopify/storefront-data-hooks'
 import { useUI } from '@components/common/context'
 import Link from '@components/common/Link'
+import shopifyConfig from '@config/shopify'
+import {
+  getAllProductPaths,
+  getProduct,
+} from '@lib/shopify/storefront-data-hooks/src/api/operations'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -34,9 +39,37 @@ export async function getStaticProps({
   const page = await resolveBuilderContent('page', locale, {
     urlPath: '/' + (params?.path?.join('/') || ''),
   })
+
+  const product = await getProduct(shopifyConfig, {
+    handle: 'almost-houndstooth-sweater-vest',
+  })
+
+  const nav = await builder
+  // Get the page content from Builder with the specified options
+  .get("symbol", {
+    query:{
+      id: '582de51cd1ec42868995b68d7504a354'
+    },
+  })
+  // Convert the result to a promise
+  .toPromise();
+
+  const footer = await builder
+  // Get the page content from Builder with the specified options
+  .get("symbol", {
+    query:{
+      id: '1965159bf2f24df2b28e1d4e2405a1d8'
+    },
+  })
+  // Convert the result to a promise
+  .toPromise();
+
   return {
     props: {
       page,
+      nav,
+      product,
+      footer,
       locale,
       ...(await getLayoutProps()),
     },
@@ -56,6 +89,9 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
 
 export default function Path({
   page,
+  nav,
+  footer,
+  product,
   locale,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter()
@@ -64,7 +100,8 @@ export default function Path({
   const isPreviewing = useIsPreviewing()
   const { openSidebar } = useUI()
   if (router.isFallback) {
-    return <h1>Loading...</h1>
+    return null
+    // return <h1>Loading...</h1>
   }
   // This includes setting the noindex header because static files always return a status 200 but the rendered not found page page should obviously not be indexed
   if (!page && !isPreviewing) {
@@ -104,6 +141,24 @@ export default function Path({
           }}
         />
       )}
+        <BuilderComponent
+        options={{ enrich: true }}
+        model="symbol"
+        content={nav}
+        data={{product}}
+        context={{
+          productBoxService: {
+            addToCart,
+            navigateToCart() {
+              openSidebar()
+            },
+            navigateToProductPage(product: { handle: string }) {
+              router.push(`/product/${product.handle}`)
+            },
+          },
+        }}
+        />
+        
       <BuilderComponent
         options={{ enrich: true }}
         model="page"
@@ -128,6 +183,11 @@ export default function Path({
         }}
         {...(page && { content: page })}
       />
+        {!Builder.isEditing && <BuilderComponent
+        options={{ enrich: true }}
+        model="symbol"
+        content={footer}
+        /> }
     </div>
   )
 }

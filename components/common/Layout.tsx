@@ -17,6 +17,8 @@ import themesMap from '@config/theme'
 import seoConfig from '@config/seo.json'
 import NoSSR from './NoSSR'
 
+
+
 const FeatureBar = dynamic(() => import('@components/common/FeatureBar'), {
   ssr: false,
 })
@@ -71,22 +73,12 @@ const InnerLayout: React.FC<{
       ...colorOverrides,
     },
   }
-  const { displaySidebar, closeSidebar } = useUI()
+  const { displaySidebar, closeSidebar ,openSidebar} = useUI()
   const { acceptedCookies, onAcceptCookies } = useAcceptCookies()
   return (
     <ThemeProvider theme={theme}>
-      <Navbar />
-      <div
-        sx={{
-          margin: `0 auto`,
-          px: 20,
-          maxWidth: 1920,
-          minWidth: '60vw',
-          minHeight: 800,
-        }}
-      >
+ 
         <main>{children}</main>
-      </div>
 
       <Sidebar
         open={
