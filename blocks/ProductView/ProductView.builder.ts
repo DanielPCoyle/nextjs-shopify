@@ -1,6 +1,8 @@
 import { Builder } from '@builder.io/react'
 import dynamic from 'next/dynamic'
 import { BuilderMarquee } from './BuilderMarquee';
+import Calendar from './Calendar';
+
 
 const LazyProductView = dynamic(
   () => import(`blocks/ProductView/ProductView`),
@@ -46,6 +48,11 @@ Builder.registerComponent(LazyProductView, {
   image: 'https://unpkg.com/css.gg@2.0.0/icons/svg/ereader.svg',
   description: 'Choose a product to show its details on page',
 })
+
+
+Builder.registerComponent(Calendar, {
+  name:"Calendar"
+});
 
 Builder.registerComponent(BuilderMarquee, {
   name: 'Marquee',

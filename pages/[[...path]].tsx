@@ -16,6 +16,7 @@ import DefaultErrorPage from 'next/error'
 import Head from 'next/head'
 import { resolveBuilderContent } from '@lib/resolve-builder-content'
 
+
 builder.init(builderConfig.apiKey)
 import '../blocks/ProductGrid/ProductGrid.builder'
 import '../blocks/CollectionView/CollectionView.builder'
