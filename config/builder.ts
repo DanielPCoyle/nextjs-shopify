@@ -3,7 +3,7 @@ if (!process.env.BUILDER_PUBLIC_KEY) {
 }
 
 export default {
-  apiKey: process.env.BUILDER_PUBLIC_KEY,
+  apiKey: "bea2326d65e644e99c62e2838b536b3a",
   productsModel: 'shopify-product',
   collectionsModel: 'shopify-collection',
 }
